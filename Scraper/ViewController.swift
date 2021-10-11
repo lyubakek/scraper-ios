@@ -34,6 +34,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     var urlArrayTest: [String] = ["https://example.com", "https://example.com/1", "https://example.com/2", "https://example.com/3", "https://example.com/4https://example.com/4"]
     
+    
+    var arrayLinks: [URL] = []
+    
     var baseUrl: URL!
     var threadCount: Int!
     var textResult: String!
@@ -82,19 +85,25 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         for match in matches {
             guard let range = Range(match.range, in: input) else { continue }
             let url = input[range]
+            
+            if let urlCheck = URL(string: String(url)) {
+                arrayLinks.append(urlCheck)
+            }
+            
             print("url will be on next row")
             print(url)
         }
+        print(arrayLinks)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.urlArrayTest.count
+        return self.arrayLinks.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier, for: indexPath) as! ResultTableViewCell
         
-        cell.urlLabel.text = self.urlArrayTest[indexPath.row]
+        cell.urlLabel.text = self.arrayLinks[indexPath.row].absoluteString
         cell.statusLabel.text = "OK"
         
         return cell
