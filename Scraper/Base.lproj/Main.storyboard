@@ -139,14 +139,23 @@
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ndH-ua-5vd" userLabel="Start Button">
                                                 <rect key="frame" x="0.0" y="0.0" width="132.5" height="30"/>
                                                 <state key="normal" title="Start Button"/>
+                                                <connections>
+                                                    <action selector="startButtonTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Z99-Qi-YMK"/>
+                                                </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hfb-Ep-mwW" userLabel="Stop Button">
                                                 <rect key="frame" x="140.5" y="0.0" width="133" height="30"/>
                                                 <state key="normal" title="Stop Button"/>
+                                                <connections>
+                                                    <action selector="stopButtonTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="yv6-Ox-k7M"/>
+                                                </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QGS-GI-53G" userLabel="Pause Button">
                                                 <rect key="frame" x="281.5" y="0.0" width="132.5" height="30"/>
                                                 <state key="normal" title="Pause Button"/>
+                                                <connections>
+                                                    <action selector="pauseButtonTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="lPB-Iu-BYb"/>
+                                                </connections>
                                             </button>
                                         </subviews>
                                     </stackView>
