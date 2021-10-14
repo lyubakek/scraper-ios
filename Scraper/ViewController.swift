@@ -14,7 +14,7 @@ import CoreData
 
 @objcMembers
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate {
-
+    
     @IBOutlet weak var startButton: UIButton!
     @IBOutlet weak var stopButton: UIButton!
     @IBOutlet weak var pauseButton: UIButton!
@@ -29,25 +29,25 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     let parseManager = ParseManager.init()
     
     var startUrl: URL!
-        
+    
     let cellReuseIdentifier = "cell"
     
     var urlArrayTest: [String] = ["https://example.com", "https://example.com/1", "https://example.com/2", "https://example.com/3", "https://example.com/4https://example.com/4"]
     
     
-    var arrayLinks: [URL] = []
+    var arrayLinks: [String] = []
     
     var baseUrl: URL!
     var threadCount: Int!
     var textResult: String!
     var maxUrlCount: Int!
     
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
-//        startButton.isEnabled = false
+        //        startButton.isEnabled = false
         
         startUrlTextField.delegate = self
         threadCountTextField.delegate = self
@@ -57,24 +57,24 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         startUrlTextField.text = "https://lun.ua/"
         threadCountTextField.text = "5"
         textResultTextField.text = "dog"
-        maxUrlCoutTextField.text = "25"
+        maxUrlCoutTextField.text = "10"
         
-//        tableView.register(ResultTableViewCell.self, forCellReuseIdentifier: cellReuseIdentifier)
-
+        //        tableView.register(ResultTableViewCell.self, forCellReuseIdentifier: cellReuseIdentifier)
+        
         tableView.delegate = self
         tableView.dataSource = self
         
-
+        
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.arrayLinks.count
+        return self.resultArray.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier, for: indexPath) as! ResultTableViewCell
         
-        cell.urlLabel.text = self.arrayLinks[indexPath.row].absoluteString
+        cell.urlLabel.text = self.resultArray[indexPath.row]
         cell.statusLabel.text = "OK"
         
         return cell
@@ -90,7 +90,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         if textField == startUrlTextField {
             var newTextUrl = textField.text! as NSString
             newTextUrl = newTextUrl.replacingCharacters(in: range, with: string) as NSString
-//            startUrl = URL(string: newTextUrl as String)
+            //            startUrl = URL(string: newTextUrl as String)
             print(newTextUrl)
         } else if textField == threadCountTextField {
             var threads = textField.text! as NSString
@@ -109,11 +109,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         if startUrlTextField != nil && threadCountTextField != nil && textResultTextField != nil && maxUrlCoutTextField != nil {
             startButton.isEnabled = true
         }
-
+        
         return true
     }
     
-
+    
     func textFieldDidEndEditing(_ textField: UITextField) {
         if textField == startUrlTextField {
             startUrl = URL(string: textField.text!)
@@ -132,42 +132,22 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         if startUrlTextField != nil && threadCountTextField != nil && textResultTextField != nil && maxUrlCoutTextField != nil {
             startButton.isEnabled = true
         }
-
+        
     }
 
     
-
-    
-    var urlSet: Set<URL> = []
+    var urlSet: Set<String> = []
+    var resultArray: [String] = []
     var mySet = Set<String>()
     
     var urlArrayQueue: [String] = []
     
-    func scanUrlFromQueue() {
-       let url = arrayLinks.first!
-        
-        if urlSet.contains(url) {
-            arrayLinks.removeFirst()
-        } else {
-            
-            do {
-                try ParseManager.init().findUrlsInString(String(contentsOf: url))
-            } catch  {
-                print(error)
-            }
-            
-        
-            urlSet.insert(url)
-            arrayLinks.removeFirst()
-        }
-    }
-
+    
+    
     func checkIfDataIsInSet() {
         
-        
-        
     }
-
+    
     @IBAction func startButtonTapped(_ sender: Any) {
         startButton.isEnabled = false
         stopButton.isEnabled = true
@@ -177,24 +157,27 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         guard let textFieldString = startUrlTextField.text, let htmlString = parseManager.getDataFromUrl(textFieldString) else {
             return
         }
-        
-        var array = parseManager.findUrlsInString(htmlString)
+        resultArray.append(textFieldString)
+        urlSet.insert(textFieldString)
+        arrayLinks = parseManager.findUrlsInString(htmlString)
         
         var counter = 1
         while counter != 10 || arrayLinks.count == 0  {
-            scanUrlFromQueue()
-            tableView.reloadData()
             counter += 1
-            print(counter)
-            print(arrayLinks.count)
+            let url = arrayLinks.removeFirst()
+            if !urlSet.contains(url) {
+                urlSet.insert(url)
+                resultArray.append(url)
+                if let urlCurrent = parseManager.getDataFromUrl(url) {
+                    arrayLinks.append(contentsOf: parseManager.findUrlsInString(urlCurrent))
+                }
+                
+                
+                print(counter)
+                print(arrayLinks.count)
+            }
         }
-        
-//        urlSet.insert(starUrl)
-
-        
-        print(urlSet)
         tableView.reloadData()
-        
     }
     
     @IBAction func stopButtonTapped(_ sender: Any) {
@@ -209,6 +192,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         stopButton.isEnabled = true
         print(#function)
     }
-
+    
 }
 
