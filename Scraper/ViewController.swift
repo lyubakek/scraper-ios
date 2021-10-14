@@ -26,10 +26,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     @IBOutlet weak var tableView: UITableView!
     
+    let parseManager = ParseManager.init()
+    
     var startUrl: URL!
-    
-    var htmlString: String = " "
-    
+        
     let cellReuseIdentifier = "cell"
     
     var urlArrayTest: [String] = ["https://example.com", "https://example.com/1", "https://example.com/2", "https://example.com/3", "https://example.com/4https://example.com/4"]
@@ -42,6 +42,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     var textResult: String!
     var maxUrlCount: Int!
     
+
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -53,7 +54,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         textResultTextField.delegate = self
         maxUrlCoutTextField.delegate = self
         
-        startUrlTextField.text = "https://stackoverflow.com/"
+        startUrlTextField.text = "https://lun.ua/"
         threadCountTextField.text = "5"
         textResultTextField.text = "dog"
         maxUrlCoutTextField.text = "25"
@@ -133,58 +134,37 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
 
     }
-    
-    func getDataFromUrl() {
-       
-        guard  let myURLString = startUrlTextField.text else {
-            print("text field is empty")
-            return
-        }
-        
-        guard let myURL = URL(string: myURLString) else {
-            print("Error: \(myURLString) doesn't seem to be a valid URL")
-            return
-        }
-        urlSet.insert(myURL)
-        
 
-        do {
-            let myHTMLString = try String(contentsOf: myURL, encoding: .ascii)
-            htmlString = myHTMLString
-            
-            print("HTML : \(myHTMLString)")
-        } catch let error {
-            print("Error: \(error)")
-        }
-    }
     
-    func findUrlInString() {
-        let input = htmlString
-        let detector = try! NSDataDetector(types: NSTextCheckingResult.CheckingType.link.rawValue)
-        let matches = detector.matches(in: input, options: [], range: NSRange(location: 0, length: input.utf16.count))
 
-        for match in matches {
-            guard let range = Range(match.range, in: input) else { continue }
-            let url = input[range]
-            
-            if let urlCheck = URL(string: String(url)) {
-                arrayLinks.append(urlCheck)
-            }
-            
-            baseUrl = arrayLinks.first
-            arrayLinks.removeFirst()
-            print("url will be on next row")
-            print(url)
-        }
-        print(arrayLinks)
-    }
     
     var urlSet: Set<URL> = []
     var mySet = Set<String>()
     
     var urlArrayQueue: [String] = []
+    
+    func scanUrlFromQueue() {
+       let url = arrayLinks.first!
+        
+        if urlSet.contains(url) {
+            arrayLinks.removeFirst()
+        } else {
+            
+            do {
+                try ParseManager.init().findUrlsInString(String(contentsOf: url))
+            } catch  {
+                print(error)
+            }
+            
+        
+            urlSet.insert(url)
+            arrayLinks.removeFirst()
+        }
+    }
 
     func checkIfDataIsInSet() {
+        
+        
         
     }
 
@@ -194,13 +174,25 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         pauseButton.isEnabled = true
         print(#function)
         
-        getDataFromUrl()
-        findUrlInString()
+        guard let textFieldString = startUrlTextField.text, let htmlString = parseManager.getDataFromUrl(textFieldString) else {
+            return
+        }
         
-        urlSet.insert(startUrl)
+        var array = parseManager.findUrlsInString(htmlString)
+        
+        var counter = 1
+        while counter != 10 || arrayLinks.count == 0  {
+            scanUrlFromQueue()
+            tableView.reloadData()
+            counter += 1
+            print(counter)
+            print(arrayLinks.count)
+        }
+        
+//        urlSet.insert(starUrl)
 
         
-        
+        print(urlSet)
         tableView.reloadData()
         
     }
