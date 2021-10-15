@@ -56,7 +56,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         startUrlTextField.text = "https://lun.ua/"
         threadCountTextField.text = "5"
-        textResultTextField.text = "dog"
+        textResultTextField.text = "lun"
         maxUrlCountTextField.text = "10"
         
         //        tableView.register(ResultTableViewCell.self, forCellReuseIdentifier: cellReuseIdentifier)
@@ -140,6 +140,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     var urlSet: Set<String> = []
     var resultArray: [String] = []
     var mySet = Set<String>()
+    var arrayBool: [Bool] = []
     
     var urlArrayQueue: [String] = []
 
@@ -153,7 +154,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         pauseButton.isEnabled = true
         print(#function)
 
-        guard let textFieldString = startUrlTextField.text, let htmlString = parseManager.getDataFromUrl(textFieldString) else {
+        guard let textFieldString = startUrlTextField.text, let htmlString = parseManager.getDataFromUrl(textFieldString), let findText = textResultTextField.text else {
             return
         }
         resultArray.append(textFieldString)
@@ -169,13 +170,13 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 resultArray.append(url)
                 if let urlCurrent = parseManager.getDataFromUrl(url) {
                     arrayLinks.append(contentsOf: parseManager.findUrlsInString(urlCurrent))
+                    arrayBool.append(parseManager.findTextOnPage(findText, urlCurrent))
                 }
-                
-                
                 print(counter)
                 print(arrayLinks.count)
             }
         }
+        print(arrayBool)
         tableView.reloadData()
     }
     

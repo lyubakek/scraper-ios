@@ -10,6 +10,15 @@ import UIKit
 
 class ParseManager {
     
+    func findTextOnPage(_ findingText: String, _ htmlString: String) -> Bool {
+        
+        if htmlString.contains(findingText) {
+            return true
+        }
+        return false
+    }
+    
+    
     func getDataFromUrl(_ urlString: String) -> String? {
        
         guard let myURL = URL(string: urlString) else {
@@ -27,7 +36,6 @@ class ParseManager {
 //            print("Error: \(error)")
 //        }
     }
-    
     
     func findUrlsInString(_ inputString: String) -> [String] {
         var array: [String] = []
