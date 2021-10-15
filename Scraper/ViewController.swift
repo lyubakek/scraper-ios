@@ -109,14 +109,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         if startUrlTextField != nil && threadCountTextField != nil && textResultTextField != nil && maxUrlCountTextField != nil {
             startButton.isEnabled = true
         }
-        
         return true
     }
-    
-    // TODO: remove all optionals from text fields
-    
+        
     func textFieldDidEndEditing(_ textField: UITextField) {
-        if textField == startUrlTextField, let text = textField.text, let urlValue = URL(string: text) {
+        if textField == startUrlTextField, let urlValue = textField.text.flatMap({URL(string: $0)}) {
             startUrl = urlValue
             print("this is a start url " + "\(startUrl as Any)")
         } else if textField == threadCountTextField, let text = textField.text, let intValue = Int(text) {
@@ -135,7 +132,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
         
     }
-
     
     var urlSet: Set<String> = []
     var resultArray: [String] = []
@@ -144,10 +140,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     var urlArrayQueue: [String] = []
 
-    func checkIfDataIsInSet() {
-        
-    }
-    
     @IBAction func startButtonTapped(_ sender: Any) {
         startButton.isEnabled = false
         stopButton.isEnabled = true
