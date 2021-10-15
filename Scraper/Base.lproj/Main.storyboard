@@ -176,7 +176,7 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="maxUrlCoutTextField" destination="G6A-tF-cmE" id="RcI-Og-2Em"/>
+                        <outlet property="maxUrlCountTextField" destination="G6A-tF-cmE" id="RcI-Og-2Em"/>
                         <outlet property="pauseButton" destination="QGS-GI-53G" id="S8r-Bq-9BL"/>
                         <outlet property="startButton" destination="ndH-ua-5vd" id="mS8-OP-ZoO"/>
                         <outlet property="startUrlTextField" destination="xXj-0L-G4b" id="VRl-vN-vcm"/>

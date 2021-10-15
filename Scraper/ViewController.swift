@@ -22,7 +22,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     @IBOutlet weak var startUrlTextField: UITextField!
     @IBOutlet weak var threadCountTextField: UITextField!
     @IBOutlet weak var textResultTextField: UITextField!
-    @IBOutlet weak var maxUrlCoutTextField: UITextField!
+    @IBOutlet weak var maxUrlCountTextField: UITextField!
     
     @IBOutlet weak var tableView: UITableView!
     
@@ -40,7 +40,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     var baseUrl: URL!
     var threadCount: Int!
     var textResult: String!
-    var maxUrlCount: Int!
+    var maxUrlCount: Int = 5
     
     
     override func viewDidLoad() {
@@ -52,12 +52,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         startUrlTextField.delegate = self
         threadCountTextField.delegate = self
         textResultTextField.delegate = self
-        maxUrlCoutTextField.delegate = self
+        maxUrlCountTextField.delegate = self
         
         startUrlTextField.text = "https://lun.ua/"
         threadCountTextField.text = "5"
         textResultTextField.text = "dog"
-        maxUrlCoutTextField.text = "10"
+        maxUrlCountTextField.text = "10"
         
         //        tableView.register(ResultTableViewCell.self, forCellReuseIdentifier: cellReuseIdentifier)
         
@@ -100,36 +100,37 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             var findText = textField.text! as NSString
             findText = findText.replacingCharacters(in: range, with: string) as NSString
             print(findText)
-        } else if textField == maxUrlCoutTextField {
+        } else if textField == maxUrlCountTextField {
             var urlCount = textField.text! as NSString
             urlCount = urlCount.replacingCharacters(in: range, with: string) as NSString
             print(urlCount)
         }
         
-        if startUrlTextField != nil && threadCountTextField != nil && textResultTextField != nil && maxUrlCoutTextField != nil {
+        if startUrlTextField != nil && threadCountTextField != nil && textResultTextField != nil && maxUrlCountTextField != nil {
             startButton.isEnabled = true
         }
         
         return true
     }
     
+    // TODO: remove all optionals from text fields
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-        if textField == startUrlTextField {
-            startUrl = URL(string: textField.text!)
+        if textField == startUrlTextField, let text = textField.text, let urlValue = URL(string: text) {
+            startUrl = urlValue
             print("this is a start url " + "\(startUrl as Any)")
-        } else if textField == threadCountTextField {
-            threadCount = Int(textField.text!)
+        } else if textField == threadCountTextField, let text = textField.text, let intValue = Int(text) {
+            threadCount = intValue
             print("this is how many threads can be " + "\(threadCount as Any)")
-        } else if textField == textResultTextField {
-            textResult = String(textField.text!)
+        } else if textField == textResultTextField, let text = textField.text {
+            textResult = text
             print("this is text to find " + "\(textResult as Any)")
-        } else if textField == maxUrlCoutTextField {
-            maxUrlCount = Int(textField.text!)
+        } else if textField == maxUrlCountTextField, let text = textField.text, let intValue = Int(text) {
+            maxUrlCount = intValue
             print("this is url count when we can stop " + "\(maxUrlCount as Any)")
         }
         
-        if startUrlTextField != nil && threadCountTextField != nil && textResultTextField != nil && maxUrlCoutTextField != nil {
+        if startUrlTextField != nil && threadCountTextField != nil && textResultTextField != nil && maxUrlCountTextField != nil {
             startButton.isEnabled = true
         }
         
@@ -141,9 +142,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     var mySet = Set<String>()
     
     var urlArrayQueue: [String] = []
-    
-    
-    
+
     func checkIfDataIsInSet() {
         
     }
@@ -153,16 +152,16 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         stopButton.isEnabled = true
         pauseButton.isEnabled = true
         print(#function)
-        
+
         guard let textFieldString = startUrlTextField.text, let htmlString = parseManager.getDataFromUrl(textFieldString) else {
             return
         }
         resultArray.append(textFieldString)
         urlSet.insert(textFieldString)
         arrayLinks = parseManager.findUrlsInString(htmlString)
-        
+//        print("max URL count is \(String(describing: maxUrlCount))")
         var counter = 1
-        while counter != 10 || arrayLinks.count == 0  {
+        while counter != maxUrlCount || arrayLinks.count == 0  {
             counter += 1
             let url = arrayLinks.removeFirst()
             if !urlSet.contains(url) {
