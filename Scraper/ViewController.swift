@@ -130,7 +130,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         if startUrlTextField != nil && threadCountTextField != nil && textResultTextField != nil && maxUrlCountTextField != nil {
             startButton.isEnabled = true
         }
-        
     }
     
     var urlSet: Set<String> = []
@@ -183,6 +182,17 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         startButton.isEnabled = true
         stopButton.isEnabled = true
         print(#function)
+    }
+    
+    @IBAction func clearButtonTapped(_sender: Any) {
+        clearAllTextFields()
+    }
+    
+    func clearAllTextFields() {
+        startUrlTextField.text = ""
+        threadCountTextField.text = ""
+        textResultTextField.text = ""
+        maxUrlCountTextField.text = ""
     }
     
 }
