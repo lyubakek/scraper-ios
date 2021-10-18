@@ -3,10 +3,6 @@
 //  Scraper
 //
 //  Created by Liubov Kovalchuk on 07.10.2021.
-//
-//    ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~:/?#[]@!$&'()*+,;=
-//    var allowedSymbols = [ "A","B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "-", ".", "_", "~", ":", "/", "?", "#", "[", "]", "@", "!", "$", "&", "(", ")", "*", "+", ",", ";", "=", "'"]
-
 
 import UIKit
 import Foundation
@@ -29,21 +25,15 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     let parseManager = ParseManager.init()
     
     var tableItem = TableItem.init(nameUrl: "this is url", stateUrl: true)
-    //    typealias tupleTableItem = (String, Bool)
-    
-    var startUrl: URL!
-    
+        
     let cellReuseIdentifier = "cell"
-    
-    //    var urlArrayTest: [String] = ["https://example.com", "https://example.com/1", "https://example.com/2", "https://example.com/3", "https://example.com/4https://example.com/4"]
-    
+        
     var arrayLinks: [String] = []
     
-    var baseUrl: URL!
+    var startUrl: URL!
     var threadCount: Int!
     var textResult: String!
-    var maxUrlCount: Int = 9
-    
+    var maxUrlCount: Int = 5
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -80,7 +70,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         cell.statusLabel.text = self.arrayTableItems[indexPath.row].stateUrl?.description
         
         return cell
-        
     }
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
@@ -136,14 +125,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     var urlSet: Set<String> = []
     var resultArray: [String] = []
-    var mySet = Set<String>()
-    var arrayBool: [Bool] = []
-    
-    var urlArrayQueue: [String] = []
     
     var arrayTableItems: [TableItem] = []
-    
-    
+
     @IBAction func startButtonTapped(_ sender: Any) {
         startButton.isEnabled = false
         stopButton.isEnabled = true
@@ -173,15 +157,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 if let urlCurrent = parseManager.getDataFromUrl(url) {
                     let oneTableItem: TableItem = TableItem(nameUrl: url, stateUrl: parseManager.findTextOnPage(findText, urlCurrent))
                     arrayTableItems.append(oneTableItem)
-                    
                     arrayLinks.append(contentsOf: parseManager.findUrlsInString(urlCurrent))
-                    arrayBool.append(parseManager.findTextOnPage(findText, urlCurrent))
                 }
                 print(counter)
                 print(arrayLinks.count)
             }
         }
-        print(arrayBool)
         tableView.reloadData()
         
         for item in arrayTableItems {
@@ -212,6 +193,5 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         textResultTextField.text = ""
         maxUrlCountTextField.text = ""
     }
-    
 }
 
