@@ -28,19 +28,21 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     let parseManager = ParseManager.init()
     
+    var tableItem = TableItem.init(nameUrl: "this is url", stateUrl: true)
+    //    typealias tupleTableItem = (String, Bool)
+    
     var startUrl: URL!
     
     let cellReuseIdentifier = "cell"
     
-    var urlArrayTest: [String] = ["https://example.com", "https://example.com/1", "https://example.com/2", "https://example.com/3", "https://example.com/4https://example.com/4"]
-    
+    //    var urlArrayTest: [String] = ["https://example.com", "https://example.com/1", "https://example.com/2", "https://example.com/3", "https://example.com/4https://example.com/4"]
     
     var arrayLinks: [String] = []
     
     var baseUrl: URL!
     var threadCount: Int!
     var textResult: String!
-    var maxUrlCount: Int = 5
+    var maxUrlCount: Int = 9
     
     
     override func viewDidLoad() {
@@ -64,18 +66,18 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         tableView.delegate = self
         tableView.dataSource = self
         
-        
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.resultArray.count
+        return self.arrayTableItems.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier, for: indexPath) as! ResultTableViewCell
         
-        cell.urlLabel.text = self.resultArray[indexPath.row]
-        cell.statusLabel.text = "OK"
+        cell.urlLabel.text = self.arrayTableItems[indexPath.row].nameUrl?.description
+        //        cell.statusLabel.text = self.tableItem.stateUrl?.description
+        cell.statusLabel.text = self.arrayTableItems[indexPath.row].stateUrl?.description
         
         return cell
         
@@ -111,7 +113,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
         return true
     }
-        
+    
     func textFieldDidEndEditing(_ textField: UITextField) {
         if textField == startUrlTextField, let urlValue = textField.text.flatMap({URL(string: $0)}) {
             startUrl = urlValue
@@ -138,21 +140,30 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     var arrayBool: [Bool] = []
     
     var urlArrayQueue: [String] = []
-
+    
+    var arrayTableItems: [TableItem] = []
+    
+    
     @IBAction func startButtonTapped(_ sender: Any) {
         startButton.isEnabled = false
         stopButton.isEnabled = true
         pauseButton.isEnabled = true
         print(#function)
-
-        guard let textFieldString = startUrlTextField.text, let htmlString = parseManager.getDataFromUrl(textFieldString), let findText = textResultTextField.text else {
+        
+        guard let textFieldString = startUrlTextField.text, let findText = textResultTextField.text else {
             return
         }
-        resultArray.append(textFieldString)
-        urlSet.insert(textFieldString)
-        arrayLinks = parseManager.findUrlsInString(htmlString)
-//        print("max URL count is \(String(describing: maxUrlCount))")
-        var counter = 1
+        
+        //        guard let textFieldString = startUrlTextField.text, let htmlString = parseManager.getDataFromUrl(textFieldString), let findText = textResultTextField.text else {
+        //            return
+        //        }
+        //        resultArray.append(textFieldString)
+        //        urlSet.insert(textFieldString)
+        //        arrayLinks = parseManager.findUrlsInString(htmlString)
+        //        print("max URL count is \(String(describing: maxUrlCount))")
+        
+        arrayLinks.append(textFieldString)
+        var counter = 0
         while counter != maxUrlCount || arrayLinks.count == 0  {
             counter += 1
             let url = arrayLinks.removeFirst()
@@ -160,6 +171,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 urlSet.insert(url)
                 resultArray.append(url)
                 if let urlCurrent = parseManager.getDataFromUrl(url) {
+                    let oneTableItem: TableItem = TableItem(nameUrl: url, stateUrl: parseManager.findTextOnPage(findText, urlCurrent))
+                    arrayTableItems.append(oneTableItem)
+                    
                     arrayLinks.append(contentsOf: parseManager.findUrlsInString(urlCurrent))
                     arrayBool.append(parseManager.findTextOnPage(findText, urlCurrent))
                 }
@@ -169,6 +183,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
         print(arrayBool)
         tableView.reloadData()
+        
+        for item in arrayTableItems {
+            print("\(String(describing: item.nameUrl))")
+        }
     }
     
     @IBAction func stopButtonTapped(_ sender: Any) {
