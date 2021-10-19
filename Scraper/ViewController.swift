@@ -24,7 +24,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     let parseManager = ParseManager.init()
     
-    var tableItem = TableItem.init(nameUrl: "this is url", stateUrl: true)
+//    var tableItem = TableItem.init(nameUrl: "this is url", stateUrl: true)
         
     let cellReuseIdentifier = "cell"
         
@@ -67,7 +67,19 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         cell.urlLabel.text = self.arrayTableItems[indexPath.row].nameUrl?.description
         //        cell.statusLabel.text = self.tableItem.stateUrl?.description
-        cell.statusLabel.text = self.arrayTableItems[indexPath.row].stateUrl?.description
+//        cell.statusLabel.text = self.arrayTableItems[indexPath.row].stateUrl?.description
+        
+        switch arrayTableItems[indexPath.row].stateUrl {
+        case .finishedScanning(let value):
+            cell.statusLabel.text = value ? "found" : "not found"
+        case .errorScan:
+            cell.statusLabel.text = "error"
+        case .notStartedScanning:
+            cell.statusLabel.text = "not started"
+        default:
+            cell.statusLabel.text = "in progress"
+        }
+        
         
         return cell
     }
@@ -155,7 +167,19 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 urlSet.insert(url)
                 resultArray.append(url)
                 if let urlCurrent = parseManager.getDataFromUrl(url) {
-                    let oneTableItem: TableItem = TableItem(nameUrl: url, stateUrl: parseManager.findTextOnPage(findText, urlCurrent))
+//                    let oneTableItem: TableItem = TableItem(nameUrl: url, stateUrl: parseManager.findTextOnPage(findText, urlCurrent))
+                    var scanState: ScanState = .inProgress
+
+                    if parseManager.findTextOnPage(findText, urlCurrent) {
+                        scanState = .finishedScanning(true)
+                    } else if !parseManager.findTextOnPage(findText, urlCurrent) {
+                        scanState = .finishedScanning(false)
+                    } else {
+                        scanState = .notStartedScanning
+                    }
+
+                    let oneTableItem: TableItem = TableItem(nameUrl: url, stateUrl: scanState)
+                    
                     arrayTableItems.append(oneTableItem)
                     arrayLinks.append(contentsOf: parseManager.findUrlsInString(urlCurrent))
                 }

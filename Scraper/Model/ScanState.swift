@@ -11,4 +11,5 @@ enum ScanState {
     case finishedScanning(Bool) //found or not found text on page
     case errorScan
     case notStartedScanning
+    case inProgress
 }
