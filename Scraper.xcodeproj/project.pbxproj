@@ -17,6 +17,7 @@
 		9D56A27D271786E600AF1F16 /* ScanState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D56A27C271786E600AF1F16 /* ScanState.swift */; };
 		9D56A28127183E6700AF1F16 /* ParseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D56A28027183E6700AF1F16 /* ParseManager.swift */; };
 		9D56A284271B6B7700AF1F16 /* TableItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D56A283271B6B7600AF1F16 /* TableItem.swift */; };
+		9D56A2892724579100AF1F16 /* Presenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D56A2882724578F00AF1F16 /* Presenter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,7 @@
 		9D56A27C271786E600AF1F16 /* ScanState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanState.swift; sourceTree = "<group>"; };
 		9D56A28027183E6700AF1F16 /* ParseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParseManager.swift; sourceTree = "<group>"; };
 		9D56A283271B6B7600AF1F16 /* TableItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableItem.swift; sourceTree = "<group>"; };
+		9D56A2882724578F00AF1F16 /* Presenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Presenter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,6 +76,7 @@
 				9D20E780270F3D7B00442432 /* Info.plist */,
 				9D20E7902710E56A00442432 /* ResultTableViewCell.swift */,
 				9D56A28027183E6700AF1F16 /* ParseManager.swift */,
+				9D56A2882724578F00AF1F16 /* Presenter.swift */,
 			);
 			path = Scraper;
 			sourceTree = "<group>";
@@ -159,6 +162,7 @@
 			files = (
 				9D20E777270F3D7800442432 /* ViewController.swift in Sources */,
 				9D56A28127183E6700AF1F16 /* ParseManager.swift in Sources */,
+				9D56A2892724579100AF1F16 /* Presenter.swift in Sources */,
 				9D20E773270F3D7800442432 /* AppDelegate.swift in Sources */,
 				9D56A284271B6B7700AF1F16 /* TableItem.swift in Sources */,
 				9D56A27D271786E600AF1F16 /* ScanState.swift in Sources */,

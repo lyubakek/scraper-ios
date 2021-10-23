@@ -22,22 +22,14 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     @IBOutlet weak var tableView: UITableView!
     
-    let parseManager = ParseManager.init()
-    
-//    var tableItem = TableItem.init(nameUrl: "this is url", stateUrl: true)
-        
+    let presenter = Presenter.init()
+            
     let cellReuseIdentifier = "cell"
-        
-    var arrayLinks: [String] = []
-    
-    var startUrl: URL!
-    var threadCount: Int!
-    var textResult: String!
-    var maxUrlCount: Int = 5
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        
+        presenter.delegate = self
         
         //        startButton.isEnabled = false
         
@@ -59,14 +51,14 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.arrayTableItems.count
+        return presenter.arrayTableItems.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier, for: indexPath) as! ResultTableViewCell
         
-        cell.urlLabel.text = self.arrayTableItems[indexPath.row].nameUrl?.description
-        cell.statusLabel.text = self.arrayTableItems[indexPath.row].stateUrl.description
+        cell.urlLabel.text = presenter.arrayTableItems[indexPath.row].nameUrl?.description
+        cell.statusLabel.text = presenter.arrayTableItems[indexPath.row].stateUrl.description
         
 //        switch arrayTableItems[indexPath.row].stateUrl {
 //        case .finishedScanning(let value):
@@ -115,16 +107,20 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         if textField == startUrlTextField, let urlValue = textField.text.flatMap({URL(string: $0)}) {
-            startUrl = urlValue
+            let startUrl = urlValue
+            presenter.set(startUrl: urlValue)
             print("this is a start url " + "\(startUrl as Any)")
         } else if textField == threadCountTextField, let text = textField.text, let intValue = Int(text) {
-            threadCount = intValue
+            let threadCount = intValue
+            presenter.set(numberOfThreads: intValue)
             print("this is how many threads can be " + "\(threadCount as Any)")
         } else if textField == textResultTextField, let text = textField.text {
-            textResult = text
+            let textResult = text
+            presenter.set(stringToFind: text)
             print("this is text to find " + "\(textResult as Any)")
         } else if textField == maxUrlCountTextField, let text = textField.text, let intValue = Int(text) {
-            maxUrlCount = intValue
+            let maxUrlCount = intValue
+            presenter.set(maxUrlCount: intValue)
             print("this is url count when we can stop " + "\(maxUrlCount as Any)")
         }
         
@@ -132,11 +128,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             startButton.isEnabled = true
         }
     }
-    
-    var urlSet: Set<String> = []
-    var resultArray: [String] = []
-    
-    var arrayTableItems: [TableItem] = []
 
     @IBAction func startButtonTapped(_ sender: Any) {
         startButton.isEnabled = false
@@ -144,52 +135,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         pauseButton.isEnabled = true
         print(#function)
         
-        guard let textFieldString = startUrlTextField.text, let findText = textResultTextField.text else {
-            return
-        }
-        
-        //        guard let textFieldString = startUrlTextField.text, let htmlString = parseManager.getDataFromUrl(textFieldString), let findText = textResultTextField.text else {
-        //            return
-        //        }
-        //        resultArray.append(textFieldString)
-        //        urlSet.insert(textFieldString)
-        //        arrayLinks = parseManager.findUrlsInString(htmlString)
-        //        print("max URL count is \(String(describing: maxUrlCount))")
-        
-        arrayLinks.append(textFieldString)
-        var counter = 0
-        while counter != maxUrlCount || arrayLinks.count == 0  {
-            counter += 1
-            let url = arrayLinks.removeFirst()
-            if !urlSet.contains(url) {
-                urlSet.insert(url)
-                resultArray.append(url)
-                if let urlCurrent = parseManager.getDataFromUrl(url) {
-//                    let oneTableItem: TableItem = TableItem(nameUrl: url, stateUrl: parseManager.findTextOnPage(findText, urlCurrent))
-                    var scanState: ScanState = .inProgress
-
-                    if parseManager.findTextOnPage(findText, urlCurrent) {
-                        scanState = .finishedScanning(true)
-                    } else if !parseManager.findTextOnPage(findText, urlCurrent) {
-                        scanState = .finishedScanning(false)
-                    } else {
-                        scanState = .notStartedScanning
-                    }
-
-                    let oneTableItem: TableItem = TableItem(nameUrl: url, stateUrl: scanState)
-                    
-                    arrayTableItems.append(oneTableItem)
-                    arrayLinks.append(contentsOf: parseManager.findUrlsInString(urlCurrent))
-                }
-                print(counter)
-                print(arrayLinks.count)
-            }
-        }
-        tableView.reloadData()
-        
-        for item in arrayTableItems {
-            print("\(String(describing: item.nameUrl))")
-        }
+        presenter.start()
     }
     
     @IBAction func stopButtonTapped(_ sender: Any) {
@@ -217,3 +163,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
 }
 
+extension ViewController: PresenterDelegate {
+    func updateUI() {
+        tableView.reloadData()
+    }
+}
