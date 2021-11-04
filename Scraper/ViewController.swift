@@ -42,9 +42,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         threadCountTextField.text = "5"
         textResultTextField.text = "lun"
         maxUrlCountTextField.text = "10"
-        
-        //        tableView.register(ResultTableViewCell.self, forCellReuseIdentifier: cellReuseIdentifier)
-        
+                
         tableView.delegate = self
         tableView.dataSource = self
         
@@ -59,17 +57,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         cell.urlLabel.text = presenter.arrayTableItems[indexPath.row].nameUrl?.description
         cell.statusLabel.text = presenter.arrayTableItems[indexPath.row].stateUrl.description
-        
-//        switch arrayTableItems[indexPath.row].stateUrl {
-//        case .finishedScanning(let value):
-//            cell.statusLabel.text = value ? "found" : "not found"
-//        case .errorScan:
-//            cell.statusLabel.text = "error"
-//        case .notStartedScanning:
-//            cell.statusLabel.text = "not started"
-//        default:
-//            cell.statusLabel.text = "in progress"
-//        }
         
         return cell
     }
@@ -136,6 +123,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         print(#function)
         
         presenter.start()
+        
     }
     
     @IBAction func stopButtonTapped(_ sender: Any) {
@@ -168,3 +156,32 @@ extension ViewController: PresenterDelegate {
         tableView.reloadData()
     }
 }
+
+
+//    private var _found = false {
+//        willSet{
+//            print(newValue)
+//        } didSet {
+//            print(_found)
+//    }}
+//    var found: Bool {
+//        get {
+//            var realFound: Bool!
+//            DispatchQueue.main.sync {
+//                realFound = _found
+//            }
+//            return realFound
+//        }
+//        set {
+//            DispatchQueue.main.sync {
+//                _found = newValue
+//            }
+//        }
+//    }
+//
+//    func threadSafeGetFound() -> Bool {
+//        return _found
+//    }
+//    func threadSafeSetFound(_ newValue: Bool) {
+//        _found = newValue
+//    }

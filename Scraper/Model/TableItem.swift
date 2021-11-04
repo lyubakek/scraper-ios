@@ -14,5 +14,5 @@ import Foundation
 
 struct TableItem {
     var nameUrl: String?
-    var stateUrl: ScanState
+    var stateUrl: ScanState = .notStartedScanning
 }
