@@ -20,13 +20,16 @@ class Presenter {
     private var maxUrlCount: Int = 5
     
     private var arrayLinks: [String] = []
-    
     private var arrayLinksLock = NSLock()
     
-    func safeArrayLinksRemoveFirst() -> String {
-        let link: String
+    func safeArrayLinksRemoveFirst() -> String? {
+        let link: String?
         arrayLinksLock.lock()
-        link = arrayLinks.removeFirst()
+        if arrayLinks.count == 0 {
+            link = nil
+        } else {
+            link = arrayLinks.removeFirst()
+        }
         arrayLinksLock.unlock()
         return link
     }
@@ -66,6 +69,30 @@ class Presenter {
         contains = urlSet.contains(member)
         urlSetLock.unlock()
         return contains
+    }
+    
+    
+    private var blockCounter: Int = 0
+    private var blockCounterLock = NSLock()
+    
+    func safeIncrement() {
+        blockCounterLock.lock()
+        blockCounter += 1
+        blockCounterLock.unlock()
+    }
+    
+    func safeDecrement() {
+        blockCounterLock.lock()
+        blockCounter -= 1
+        blockCounterLock.unlock()
+    }
+    
+    var safeBlockCounter: Int {
+        let counter: Int
+        blockCounterLock.lock()
+        counter = blockCounter
+        blockCounterLock.unlock()
+        return counter
     }
     
     let parseManager = ParseManager.init()
@@ -117,15 +144,20 @@ class Presenter {
             var counter = 0
             
             
-            while counter != maxUrlCount || safeArrayLinksCount == 0  {
+            while counter != maxUrlCount || safeArrayLinksCount != 0 || safeBlockCounter != 0  {
+
+                
+                guard let url = safeArrayLinksRemoveFirst() else { continue }
                 counter += 1
-                    
-                    let url = safeArrayLinksRemoveFirst()
+                
                 let blockOperation = BlockOperation {
+                    safeIncrement()
+                    print("This is start blockOperation")
                     if !safeUrlSetContains(url) {
                         safeUrlSetInsert(url)
                         if let urlCurrent = parseManager.getDataFromUrl(url) {
                             var scanState: ScanState = .inProgress
+                            safeArrayLinksAppend(contentsOf: parseManager.findUrlsInString(urlCurrent))
                             if parseManager.findTextOnPage(textToFind, urlCurrent) {
                                 scanState = .finishedScanning(true)
                             } else {
@@ -133,13 +165,14 @@ class Presenter {
                             }
                             let oneTableItem: TableItem = TableItem(nameUrl: url, stateUrl: scanState)
                             safeAppend(tableItem: oneTableItem)
-                            safeArrayLinksAppend(contentsOf: parseManager.findUrlsInString(urlCurrent))
+                            
                             print("fsdsdfgsfsgf")
                         }
                     }
                     print(counter)
                     print(safeArrayLinksCount)
                 }
+                blockOperation.completionBlock = { safeDecrement() }
                 queue.addOperation(blockOperation)
             }
         }
