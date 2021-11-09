@@ -41,7 +41,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         startUrlTextField.text = "https://lun.ua/"
         threadCountTextField.text = "5"
         textResultTextField.text = "lun"
-        maxUrlCountTextField.text = "10"
+        maxUrlCountTextField.text = "50"
                 
         tableView.delegate = self
         tableView.dataSource = self
@@ -117,6 +117,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
 
     @IBAction func startButtonTapped(_ sender: Any) {
+        startUrlTextField.resignFirstResponder()
+        textResultTextField.resignFirstResponder()
+        threadCountTextField.resignFirstResponder()
+        maxUrlCountTextField.resignFirstResponder()
         startButton.isEnabled = false
         stopButton.isEnabled = true
         pauseButton.isEnabled = true
@@ -125,11 +129,16 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         presenter.start()
         
     }
+
+    
     
     @IBAction func stopButtonTapped(_ sender: Any) {
         stopButton.isEnabled = false
         startButton.isEnabled = true
         print(#function)
+        
+        presenter.stop()
+        
     }
     
     @IBAction func pauseButtonTapped(_ sender: Any) {
