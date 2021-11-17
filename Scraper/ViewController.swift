@@ -129,8 +129,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         presenter.start()
         
     }
-
-    
     
     @IBAction func stopButtonTapped(_ sender: Any) {
         stopButton.isEnabled = false
