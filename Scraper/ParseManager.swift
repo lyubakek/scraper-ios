@@ -9,22 +9,54 @@ import Foundation
 import UIKit
 
 class ParseManager {
-        
+    
+    enum ParseError: Error {
+        case corruptUrl(String)
+        case emptyString
+        case emptyData
+        var localizedDescription: String {
+            switch self {
+            case .corruptUrl(let url):
+                return "Error: \(url) doesn't seem to be a valid URL"
+            case .emptyString:
+                return "Your string is empty"
+            case .emptyData:
+                return "Data is empty"
+            }
+        }
+    }
+    
     func findTextOnPage(_ findingText: String, _ htmlString: String) -> Bool {
-        
         if htmlString.contains(findingText) {
             return true
         }
         return false
     }
     
-    func getDataFromUrl(_ urlString: String) -> String? {
-        
+    func getDataFromUrl(_ urlString: String, completion:  @escaping (Result<String, Error>) -> Void) {
         guard let myURL = URL(string: urlString) else {
+            completion(.failure(ParseError.corruptUrl(urlString)))
             print("Error: \(urlString) doesn't seem to be a valid URL")
-            return ""
+            return
         }
-        return try? String(contentsOf: myURL, encoding: .ascii)
+        
+        let task = URLSession.shared.dataTask(with: myURL) { (data, response, error) in
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+            guard let data = data else {
+                completion(.failure(ParseError.emptyData))
+                return
+            } 
+            guard let some = String(data: data, encoding: .ascii) else {
+                completion(.failure(ParseError.emptyString))
+                return
+            }
+            completion(.success(some))
+            //        return try? String(contentsOf: myURL, encoding: .ascii)
+        }
+        task.resume()
     }
     
     func findUrlsInString(_ inputString: String) -> [String] {
@@ -44,10 +76,7 @@ class ParseManager {
                 array.append(url)
                 set.insert(url)
             }
-//            print("url will be on next row")
-//            print(url)
         }
-//        print(array)
         return array
     }
 }

@@ -97,7 +97,7 @@ class Presenter {
     }
     
     let parseManager = ParseManager.init()
-        
+    
     private(set) var arrayTableItems: [TableItem] = [] {
         didSet {
             delegate?.updateUI()
@@ -160,16 +160,23 @@ class Presenter {
                     print("This is start blockOperation at \(Thread.current)")
                     if !safeUrlSetContains(url) {
                         safeUrlSetInsert(url)
-                        if let urlCurrent = parseManager.getDataFromUrl(url) {
-                            var scanState: ScanState = .inProgress
-                            safeArrayLinksAppend(contentsOf: parseManager.findUrlsInString(urlCurrent))
-                            if parseManager.findTextOnPage(textToFind, urlCurrent) {
-                                scanState = .finishedScanning(true)
-                            } else {
-                                scanState = .finishedScanning(false)
+                        
+                        parseManager.getDataFromUrl(url) { (result) in
+                            switch result {
+                            case .success(let html):
+                                var scanState: ScanState = .inProgress
+                                safeArrayLinksAppend(contentsOf: parseManager.findUrlsInString(html))
+                                if parseManager.findTextOnPage(textToFind, html) {
+                                    scanState = .finishedScanning(true)
+                                } else {
+                                    scanState = .finishedScanning(false)
+                                }
+                                let oneTableItem: TableItem = TableItem(nameUrl: url, stateUrl: scanState)
+                                safeAppend(tableItem: oneTableItem)
+                                
+                            case .failure(let error):
+                                print(error.localizedDescription)
                             }
-                            let oneTableItem: TableItem = TableItem(nameUrl: url, stateUrl: scanState)
-                            safeAppend(tableItem: oneTableItem)
                         }
                     }
                     print(counter)
