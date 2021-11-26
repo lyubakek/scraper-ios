@@ -12,13 +12,11 @@ protocol PresenterDelegate: class {
 }
 
 class Presenter {
-    
     weak var delegate: PresenterDelegate?
     private var startUrl: URL!
     private var numberOfThreads: Int = 0
     private var textToFind: String = ""
     private var maxUrlCount: Int = 5
-    
     private var arrayLinks: [String] = []
     private var arrayLinksLock = NSLock()
     
@@ -33,7 +31,6 @@ class Presenter {
         arrayLinksLock.unlock()
         return link
     }
-    
     func safeArrayLinksAppend(contentsOf array: [String]) {
         arrayLinksLock.lock()
         arrayLinks.append(contentsOf: array)
@@ -53,10 +50,8 @@ class Presenter {
         arrayLinksLock.unlock()
         return count
     }
-    
     private var urlSet: Set<String> = []
     private var urlSetLock = NSLock()
-    
     func safeUrlSetInsert(_ url: String) {
         urlSetLock.lock()
         urlSet.insert(url)
@@ -70,24 +65,20 @@ class Presenter {
         urlSetLock.unlock()
         return contains
     }
-    
     private var blockCounter: Int = 0
     private var blockCounterLock = NSLock()
-    
     func safeIncrement() {
         blockCounterLock.lock()
         blockCounter += 1
         print("increment \(blockCounter)")
         blockCounterLock.unlock()
     }
-    
     func safeDecrement() {
         blockCounterLock.lock()
         blockCounter -= 1
         print("decrement \(blockCounter)")
         blockCounterLock.unlock()
     }
-    
     var safeBlockCounter: Int {
         let counter: Int
         blockCounterLock.lock()
@@ -95,15 +86,12 @@ class Presenter {
         blockCounterLock.unlock()
         return counter
     }
-    
     let parseManager = ParseManager.init()
-    
     private(set) var arrayTableItems: [TableItem] = [] {
         didSet {
             delegate?.updateUI()
         }
     }
-    
     func set(numberOfThreads: Int) {
         self.numberOfThreads = numberOfThreads
     }
@@ -111,15 +99,12 @@ class Presenter {
     func set(stringToFind: String) {
         self.textToFind = stringToFind
     }
-    
     func set(maxUrlCount: Int) {
         self.maxUrlCount = maxUrlCount
     }
-    
     func set(startUrl: URL) {
         self.startUrl = startUrl
     }
-    
     func safeAppend(tableItem: TableItem) {
         DispatchQueue.main.async {
             self.arrayTableItems.append(tableItem)
@@ -127,40 +112,30 @@ class Presenter {
     }
     
     let queue = OperationQueue()
-    
     init() {
         queue.maxConcurrentOperationCount = 4
     }
-    
     func start() {
         DispatchQueue.global(qos: .default).async {  [self] in
-            
             guard textToFind != "" && startUrl != nil else {
                 return
             }
-            
             safeArrayLinksAppend(startUrl.absoluteString)
             var counter = 0
-            
-            while counter != maxUrlCount || safeArrayLinksCount != 0 || safeBlockCounter != 0  {
-                
+            while counter != maxUrlCount || safeArrayLinksCount != 0 || safeBlockCounter != 0 {
                 if counter >= maxUrlCount {
                     break
                 }
-                
                 if safeStopFunctionVar == true {
                     break
                 }
-                
                 guard let url = safeArrayLinksRemoveFirst() else { continue }
                 counter += 1
-                
                 let blockOperation = BlockOperation {
                     safeIncrement()
                     print("This is start blockOperation at \(Thread.current)")
                     if !safeUrlSetContains(url) {
                         safeUrlSetInsert(url)
-                        
                         parseManager.getDataFromUrl(url) { (result) in
                             switch result {
                             case .success(let html):

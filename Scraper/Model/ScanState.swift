@@ -8,7 +8,7 @@
 import Foundation
 
 enum ScanState {
-    case finishedScanning(Bool) //found or not found text on page
+    case finishedScanning(Bool) // found or not found text on page
     case errorScan(Error)
     case notStartedScanning
     case inProgress

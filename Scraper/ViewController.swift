@@ -24,13 +24,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     let presenter = Presenter.init()
             
-    let cellReuseIdentifier = "cell"
+    static let cellReuseIdentifier = "cell"
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         presenter.delegate = self
-        
         //        startButton.isEnabled = false
         
         startUrlTextField.delegate = self
@@ -45,7 +43,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 
         tableView.delegate = self
         tableView.dataSource = self
-        
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -53,11 +50,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier, for: indexPath) as! ResultTableViewCell
-        
+        let cell = tableView.dequeueReusableCell(withIdentifier: ViewController.cellReuseIdentifier, for: indexPath) as! ResultTableViewCell
         cell.urlLabel.text = presenter.arrayTableItems[indexPath.row].nameUrl?.description
         cell.statusLabel.text = presenter.arrayTableItems[indexPath.row].stateUrl.description
-        
         return cell
     }
     
@@ -66,7 +61,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        
         if textField == startUrlTextField {
             var newTextUrl = textField.text! as NSString
             newTextUrl = newTextUrl.replacingCharacters(in: range, with: string) as NSString
@@ -86,7 +80,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             print(urlCount)
         }
         
-        if startUrlTextField != nil && threadCountTextField != nil && textResultTextField != nil && maxUrlCountTextField != nil {
+        if startUrlTextField != nil
+            && threadCountTextField != nil
+            && textResultTextField != nil
+            && maxUrlCountTextField != nil {
             startButton.isEnabled = true
         }
         return true
@@ -111,7 +108,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             print("this is url count when we can stop " + "\(maxUrlCount as Any)")
         }
         
-        if startUrlTextField != nil && threadCountTextField != nil && textResultTextField != nil && maxUrlCountTextField != nil {
+        if startUrlTextField != nil
+            && threadCountTextField != nil
+            && textResultTextField != nil
+            && maxUrlCountTextField != nil {
             startButton.isEnabled = true
         }
     }
@@ -127,7 +127,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         print(#function)
         
         presenter.start()
-        
     }
     
     @IBAction func stopButtonTapped(_ sender: Any) {
@@ -136,7 +135,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         print(#function)
         
         presenter.stop()
-        
     }
     
     @IBAction func pauseButtonTapped(_ sender: Any) {
@@ -146,7 +144,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         print(#function)
     }
     
-    @IBAction func clearButtonTapped(_sender: Any) {
+    @IBAction func clearButtonTapped(_ sender: Any) {
         clearAllTextFields()
     }
     
@@ -163,32 +161,3 @@ extension ViewController: PresenterDelegate {
         tableView.reloadData()
     }
 }
-
-
-//    private var _found = false {
-//        willSet{
-//            print(newValue)
-//        } didSet {
-//            print(_found)
-//    }}
-//    var found: Bool {
-//        get {
-//            var realFound: Bool!
-//            DispatchQueue.main.sync {
-//                realFound = _found
-//            }
-//            return realFound
-//        }
-//        set {
-//            DispatchQueue.main.sync {
-//                _found = newValue
-//            }
-//        }
-//    }
-//
-//    func threadSafeGetFound() -> Bool {
-//        return _found
-//    }
-//    func threadSafeSetFound(_ newValue: Bool) {
-//        _found = newValue
-//    }

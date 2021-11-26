@@ -49,6 +49,7 @@ class ParseManager {
                 completion(.failure(ParseError.emptyData))
                 return
             } 
+
             guard let some = String(data: data, encoding: .ascii) else {
                 completion(.failure(ParseError.emptyString))
                 return
@@ -64,7 +65,8 @@ class ParseManager {
         var set: Set<String> = []
         
         let detector = try! NSDataDetector(types: NSTextCheckingResult.CheckingType.link.rawValue)
-        let matches = detector.matches(in: inputString, options: [], range: NSRange(location: 0, length: inputString.utf16.count))
+        let matches = detector.matches(in: inputString, options: [],
+                                       range: NSRange(location: 0, length: inputString.utf16.count))
         
         for match in matches {
             guard let range = Range(match.range, in: inputString) else { continue }
