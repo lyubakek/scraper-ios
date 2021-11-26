@@ -29,7 +29,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     override func viewDidLoad() {
         super.viewDidLoad()
         presenter.delegate = self
-        //        startButton.isEnabled = false
+        startButton.isEnabled = false
         
         startUrlTextField.delegate = self
         threadCountTextField.delegate = self
@@ -43,6 +43,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 
         tableView.delegate = self
         tableView.dataSource = self
+        
+        self.hideKeyboardWhenTappedAround()
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -159,5 +161,17 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 extension ViewController: PresenterDelegate {
     func updateUI() {
         tableView.reloadData()
+    }
+}
+
+extension UIViewController {
+    func hideKeyboardWhenTappedAround() {
+        let tap = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+    }
+    
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
     }
 }
