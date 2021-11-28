@@ -30,6 +30,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         super.viewDidLoad()
         presenter.delegate = self
         startButton.isEnabled = false
+        stopButton.isEnabled = false
+        pauseButton.isEnabled = false
         
         startUrlTextField.delegate = self
         threadCountTextField.delegate = self
@@ -144,6 +146,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         startButton.isEnabled = true
         stopButton.isEnabled = true
         print(#function)
+        let alert = UIAlertController(title: "Pause Button", message: "Pause is under development.", preferredStyle: UIAlertController.Style.alert)
+
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
+
+        self.present(alert, animated: true, completion: nil)
+        pauseButton.isEnabled = true
     }
     
     @IBAction func clearButtonTapped(_ sender: Any) {
