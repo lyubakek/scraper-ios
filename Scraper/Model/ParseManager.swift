@@ -40,7 +40,7 @@ class ParseManager {
             return
         }
         
-        let task = URLSession.shared.dataTask(with: myURL) { (data, response, error) in
+        let task = URLSession.shared.dataTask(with: myURL) { (data, _, error) in
             if let error = error {
                 completion(.failure(error))
                 return
