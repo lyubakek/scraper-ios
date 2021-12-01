@@ -23,6 +23,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     @IBOutlet weak var tableView: UITableView!
     
     let presenter = Presenter.init()
+    var selectedIndex = 0
             
     static let cellReuseIdentifier = "cell"
     
@@ -49,6 +50,14 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         self.hideKeyboardWhenTappedAround()
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "showDetail" {
+            let detailVC = segue.destination as! DetailViewController
+            detailVC.tableItem = presenter.arrayTableItems[selectedIndex]
+            self.tableView.reloadData()
+        }
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return presenter.arrayTableItems.count
     }
@@ -58,6 +67,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         cell.urlLabel.text = presenter.arrayTableItems[indexPath.row].nameUrl?.description
         cell.statusLabel.text = presenter.arrayTableItems[indexPath.row].stateUrl.description
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        selectedIndex = indexPath.row
+        performSegue(withIdentifier: "showDetail", sender: nil)
+        tableView.deselectRow(at: indexPath, animated: true)
     }
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
@@ -154,11 +169,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         pauseButton.isEnabled = true
     }
     
-    @IBAction func clearButtonTapped(_ sender: Any) {
+    @IBAction func clearButton(_ sender: UIButton) {
         clearAllTextFields()
     }
     
     func clearAllTextFields() {
+
         startUrlTextField.text = ""
         threadCountTextField.text = ""
         textResultTextField.text = ""

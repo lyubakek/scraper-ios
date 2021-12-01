@@ -7,11 +7,6 @@
 
 import Foundation
 
-// struct TableItem {
-//    var nameUrl: String?
-//    var stateUrl: Bool?
-// }
-
 struct TableItem {
     var nameUrl: String?
     var stateUrl: ScanState = .notStartedScanning
