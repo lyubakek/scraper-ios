@@ -21,3 +21,5 @@ You can press the Stop button, if you want to immediately finish scanning pages.
 - Architecture pattern: MVP
 - Concurrency: GCD, Operation, NSLock
 - Algorithms and data structures: queue, BFS
+
+![2014-10-22 11_35_09](https://thumbs.gfycat.com/ElderlyCreamyFinch-size_restricted.gif)
