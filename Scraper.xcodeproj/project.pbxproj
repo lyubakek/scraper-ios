@@ -71,6 +71,8 @@
 				9D56A27B271786CB00AF1F16 /* Model */,
 				9DEB0CC127562C8100D1721B /* View */,
 				9DEB0CBF27562C0B00D1721B /* Controller */,
+				9D56A2882724578F00AF1F16 /* Presenter.swift */,
+				9D56A28027183E6700AF1F16 /* ParseManager.swift */,
 				9D20E772270F3D7800442432 /* AppDelegate.swift */,
 				9D20E774270F3D7800442432 /* SceneDelegate.swift */,
 				9D20E778270F3D7800442432 /* Main.storyboard */,
@@ -86,9 +88,6 @@
 			children = (
 				9D56A27C271786E600AF1F16 /* ScanState.swift */,
 				9D56A283271B6B7600AF1F16 /* TableItem.swift */,
-				9D20E7902710E56A00442432 /* ResultTableViewCell.swift */,
-				9D56A28027183E6700AF1F16 /* ParseManager.swift */,
-				9D56A2882724578F00AF1F16 /* Presenter.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -105,6 +104,7 @@
 		9DEB0CC127562C8100D1721B /* View */ = {
 			isa = PBXGroup;
 			children = (
+				9D20E7902710E56A00442432 /* ResultTableViewCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";

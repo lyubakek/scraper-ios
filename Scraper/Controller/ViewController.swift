@@ -30,6 +30,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     override func viewDidLoad() {
         super.viewDidLoad()
         presenter.delegate = self
+                
         startButton.isEnabled = false
         stopButton.isEnabled = false
         pauseButton.isEnabled = false

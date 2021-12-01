@@ -212,10 +212,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="1" verticalHuggingPriority="1" axis="vertical" alignment="top" spacing="50" translatesAutoresizingMaskIntoConstraints="NO" id="7hE-G0-fRG">
-                                <rect key="frame" x="20" y="118" width="374" height="148"/>
+                                <rect key="frame" x="20" y="118" width="374" height="186"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="fby-mT-gce">
-                                        <rect key="frame" x="0.0" y="0.0" width="93" height="49"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="93" height="87"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Current link:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1QL-OD-toM">
                                                 <rect key="frame" x="0.0" y="0.0" width="93" height="20.5"/>
@@ -229,10 +229,17 @@
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JnV-S8-O6I">
+                                                <rect key="frame" x="0.0" y="57" width="59" height="30"/>
+                                                <state key="normal" title="Open url"/>
+                                                <connections>
+                                                    <action selector="openUrlButtonTapped:" destination="cs8-9X-dBF" eventType="touchUpInside" id="QAD-XA-zFh"/>
+                                                </connections>
+                                            </button>
                                         </subviews>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="gSx-bB-b3p">
-                                        <rect key="frame" x="0.0" y="99" width="113.5" height="49"/>
+                                        <rect key="frame" x="0.0" y="137" width="113.5" height="49"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Current status:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1KI-cX-rKB">
                                                 <rect key="frame" x="0.0" y="0.0" width="113.5" height="20.5"/>
@@ -262,6 +269,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="592-nh-wCn"/>
                     <connections>
+                        <outlet property="openUrlButton" destination="JnV-S8-O6I" id="1Dc-AN-w1Z"/>
                         <outlet property="statusUrlLabel" destination="GHe-rI-UAE" id="AXD-vj-m0l"/>
                         <outlet property="urlLabel" destination="eHt-IP-1YN" id="CXN-n9-e9e"/>
                     </connections>
