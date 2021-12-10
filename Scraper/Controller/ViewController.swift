@@ -26,11 +26,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     var selectedIndex = 0
             
     static let cellReuseIdentifier = "cell"
-    
+ 
     override func viewDidLoad() {
         super.viewDidLoad()
         presenter.delegate = self
-                
+        
         startButton.isEnabled = false
         stopButton.isEnabled = false
         pauseButton.isEnabled = false
@@ -172,6 +172,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     @IBAction func clearButton(_ sender: UIButton) {
         clearAllTextFields()
+        
     }
     
     func clearAllTextFields() {

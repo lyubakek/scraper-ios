@@ -22,7 +22,6 @@ class DetailViewController: UIViewController {
 
         urlLabel.text = tableItem.nameUrl
         statusUrlLabel.text = tableItem.stateUrl.description
-        
     }
     
     @IBAction func openUrlButtonTapped(_ sender: Any) {
