@@ -13,13 +13,13 @@ protocol PresenterDelegate: class {
 
 class Presenter {
     weak var delegate: PresenterDelegate?
-    private var startUrl: URL!
+    private var startUrl: URL = URL(string: "https://lun.ua/")!
     private var numberOfThreads: Int = 0
-    private var textToFind: String = ""
-    private var maxUrlCount: Int = 5
+    private var textToFind: String = "lun"
+    private var maxUrlCount: Int = 50
     private var arrayLinks: [String] = []
-    private var arrayLinksLock = NSLock()
     
+    private var arrayLinksLock = NSLock()
     func safeArrayLinksRemoveFirst() -> String? {
         let link: String?
         arrayLinksLock.lock()
@@ -117,7 +117,7 @@ class Presenter {
     }
     func start() {
         DispatchQueue.global(qos: .default).async {  [self] in
-            guard textToFind != "" && startUrl != nil else {
+            guard textToFind != "" else {
                 return
             }
             safeArrayLinksAppend(startUrl.absoluteString)

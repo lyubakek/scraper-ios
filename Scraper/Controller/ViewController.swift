@@ -31,9 +31,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         super.viewDidLoad()
         presenter.delegate = self
         
-        startButton.isEnabled = false
-        stopButton.isEnabled = false
-        pauseButton.isEnabled = false
+//        startButton.isEnabled = false
+//        stopButton.isEnabled = false
+//        pauseButton.isEnabled = false
         
         startUrlTextField.delegate = self
         threadCountTextField.delegate = self
@@ -51,14 +51,23 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         self.hideKeyboardWhenTappedAround()
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "showDetail" {
-            let detailVC = segue.destination as! DetailViewController
-            detailVC.tableItem = presenter.arrayTableItems[selectedIndex]
-            self.tableView.reloadData()
-        }
-    }
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//        if segue.identifier == "showDetail" {
+//            let detailVC = segue.destination as! DetailViewController
+//            detailVC.tableItem = presenter.arrayTableItems[selectedIndex]
+//            self.tableView.reloadData()
+//        }
+//    }
     
+    @IBSegueAction func showDetailViewController(_ coder: NSCoder) -> DetailViewController? {
+        guard let selectedRow = tableView.indexPathForSelectedRow?.row else {
+            return nil
+        }
+        
+        let tableItem = presenter.arrayTableItems[selectedRow]
+        return DetailViewController(tableItem: tableItem, coder: coder)
+    }
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return presenter.arrayTableItems.count
     }
@@ -145,7 +154,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         stopButton.isEnabled = true
         pauseButton.isEnabled = true
         print(#function)
-        
+
         presenter.start()
     }
     

@@ -9,7 +9,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--Scraper-->
         <scene sceneID="tne-QT-ifu">
             <objects>
                 <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="Scraper" customModuleProvider="target" sceneMemberID="viewController">
@@ -18,67 +18,67 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="ROe-WI-Osc" userLabel="Text Fields Stack View">
-                                <rect key="frame" x="5" y="93" width="404" height="155"/>
+                                <rect key="frame" x="5" y="93" width="404" height="160"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="14H-b2-a9c" userLabel="URL Stack View">
-                                        <rect key="frame" x="0.0" y="0.0" width="404" height="32.666666666666664"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="404" height="34"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="URL" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="obV-zY-l90">
-                                                <rect key="frame" x="0.0" y="0.0" width="32" height="32.666666666666664"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="32" height="34"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="xXj-0L-G4b" userLabel="Start URL Text Field">
-                                                <rect key="frame" x="40" y="0.0" width="364" height="32.666666666666664"/>
+                                                <rect key="frame" x="40" y="0.0" width="364" height="34"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits"/>
                                             </textField>
                                         </subviews>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="pVY-Zp-h3K" userLabel="Flow Stack View">
-                                        <rect key="frame" x="0.0" y="40.666666666666657" width="404" height="33"/>
+                                        <rect key="frame" x="0.0" y="42" width="404" height="34"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Threads" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qfH-xD-iSy">
-                                                <rect key="frame" x="0.0" y="0.0" width="62.666666666666664" height="33"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="62.666666666666664" height="34"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Xj8-a4-rUB" userLabel="Threads Text Field">
-                                                <rect key="frame" x="70.666666666666657" y="0.0" width="333.33333333333337" height="33"/>
+                                                <rect key="frame" x="70.666666666666657" y="0.0" width="333.33333333333337" height="34"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits"/>
                                             </textField>
                                         </subviews>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="uca-Ms-57N" userLabel="Text to find Stack View">
-                                        <rect key="frame" x="0.0" y="81.666666666666657" width="404" height="32.666666666666657"/>
+                                        <rect key="frame" x="0.0" y="84" width="404" height="34"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Text to find" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fBO-0d-DNT">
-                                                <rect key="frame" x="0.0" y="0.0" width="85" height="32.666666666666664"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="85" height="34"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="7KK-Uq-KNq" userLabel="Text Result Text Field">
-                                                <rect key="frame" x="93" y="0.0" width="311" height="32.666666666666664"/>
+                                                <rect key="frame" x="93" y="0.0" width="311" height="34"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits"/>
                                             </textField>
                                         </subviews>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="LUL-52-Fuz" userLabel="Max url count Stack View">
-                                        <rect key="frame" x="0.0" y="122.33333333333336" width="404" height="32.666666666666671"/>
+                                        <rect key="frame" x="0.0" y="126" width="404" height="34"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Max url count " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hTd-8n-Teb">
-                                                <rect key="frame" x="0.0" y="0.0" width="108" height="32.666666666666664"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="108" height="34"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="G6A-tF-cmE" userLabel="Max url count Text Field">
-                                                <rect key="frame" x="116" y="0.0" width="288" height="32.666666666666664"/>
+                                                <rect key="frame" x="116" y="0.0" width="288" height="34"/>
                                                 <color key="tintColor" systemColor="labelColor"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits"/>
@@ -88,7 +88,7 @@
                                 </subviews>
                             </stackView>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Ufx-Wq-lTJ">
-                                <rect key="frame" x="0.0" y="288" width="414" height="528"/>
+                                <rect key="frame" x="0.0" y="299" width="414" height="517"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" rowHeight="262" id="5wB-ll-cAQ" customClass="ResultTableViewCell" customModule="Scraper" customModuleProvider="target">
@@ -185,10 +185,12 @@
                                     </button>
                                 </subviews>
                             </stackView>
-                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="GkX-g9-GoQ">
-                                <rect key="frame" x="122" y="256" width="170" height="24"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GkX-g9-GoQ">
+                                <rect key="frame" x="127" y="261" width="160" height="30"/>
                                 <color key="backgroundColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="160" id="S76-JW-UpK"/>
+                                </constraints>
                                 <size key="titleShadowOffset" width="2" height="0.0"/>
                                 <state key="normal" title="Clear all text fields">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -209,6 +211,7 @@
                             <constraint firstItem="RRY-Yi-IlL" firstAttribute="top" secondItem="Ufx-Wq-lTJ" secondAttribute="bottom" constant="8" id="35X-mM-t6S"/>
                             <constraint firstItem="GkX-g9-GoQ" firstAttribute="top" secondItem="ROe-WI-Osc" secondAttribute="bottom" constant="8" symbolic="YES" id="4MI-BJ-b33"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="ROe-WI-Osc" secondAttribute="trailing" constant="5" id="4UU-rA-TTd"/>
+                            <constraint firstItem="GkX-g9-GoQ" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Eub-JK-ahR"/>
                             <constraint firstItem="Ufx-Wq-lTJ" firstAttribute="top" secondItem="GkX-g9-GoQ" secondAttribute="bottom" constant="8" symbolic="YES" id="FnM-RS-Akd"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="RRY-Yi-IlL" secondAttribute="trailing" constant="8" id="K8M-9c-yn4"/>
                             <constraint firstItem="Ufx-Wq-lTJ" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="RR2-D3-zxA"/>
@@ -219,7 +222,7 @@
                             <constraint firstItem="RRY-Yi-IlL" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="8" id="wzu-6S-gyh"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="el0-ua-1Ju"/>
+                    <navigationItem key="navigationItem" title="Scraper" id="el0-ua-1Ju"/>
                     <connections>
                         <outlet property="maxUrlCountTextField" destination="G6A-tF-cmE" id="RcI-Og-2Em"/>
                         <outlet property="pauseButton" destination="QGS-GI-53G" id="S8r-Bq-9BL"/>
@@ -229,7 +232,7 @@
                         <outlet property="tableView" destination="Ufx-Wq-lTJ" id="FnN-ru-D2B"/>
                         <outlet property="textResultTextField" destination="7KK-Uq-KNq" id="cya-1g-zUG"/>
                         <outlet property="threadCountTextField" destination="Xj8-a4-rUB" id="Cg7-2r-zGK"/>
-                        <segue destination="cs8-9X-dBF" kind="show" identifier="showDetail" id="taM-3d-IzH"/>
+                        <segue destination="cs8-9X-dBF" kind="show" identifier="showDetail" destinationCreationSelector="showDetailViewController:" id="taM-3d-IzH"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
