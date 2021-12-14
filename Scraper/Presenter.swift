@@ -119,7 +119,7 @@ class Presenter {
     }
     
     private let queue = OperationQueue()
-    private init() {}
+    init() {}
     
     func start() {
         DispatchQueue.global(qos: .default).async {  [self] in
