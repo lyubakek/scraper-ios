@@ -14,13 +14,18 @@ protocol PresenterDelegate: class {
 class Presenter {
     weak var delegate: PresenterDelegate?
     private var startUrl: URL = URL(string: "https://lun.ua/")!
-    private var numberOfThreads: Int = 0
+    private var numberOfThreads: Int = 5 {
+        didSet {
+            queue.maxConcurrentOperationCount = numberOfThreads
+        }
+    }
     private var textToFind: String = "lun"
     private var maxUrlCount: Int = 50
     private var arrayLinks: [String] = []
     
+    //TODO: - Modify lock so it only locks when there are no writing actions. See: Dispatch Barrier
     private var arrayLinksLock = NSLock()
-    func safeArrayLinksRemoveFirst() -> String? {
+    private func safeArrayLinksRemoveFirst() -> String? {
         let link: String?
         arrayLinksLock.lock()
         if arrayLinks.count == 0 {
@@ -31,71 +36,72 @@ class Presenter {
         arrayLinksLock.unlock()
         return link
     }
-    func safeArrayLinksAppend(contentsOf array: [String]) {
+    private func safeArrayLinksAppend(contentsOf array: [String]) {
         arrayLinksLock.lock()
         arrayLinks.append(contentsOf: array)
         arrayLinksLock.unlock()
     }
-    
-    func safeArrayLinksAppend(_ element: String) {
+    private func safeArrayLinksAppend(_ element: String) {
         arrayLinksLock.lock()
         arrayLinks.append(element)
         arrayLinksLock.unlock()
     }
-    
-    var safeArrayLinksCount: Int {
+    private var safeArrayLinksCount: Int {
         let count: Int
         arrayLinksLock.lock()
         count = arrayLinks.count
         arrayLinksLock.unlock()
         return count
     }
+    
     private var urlSet: Set<String> = []
     private var urlSetLock = NSLock()
-    func safeUrlSetInsert(_ url: String) {
+    private func safeUrlSetInsert(_ url: String) {
         urlSetLock.lock()
         urlSet.insert(url)
         urlSetLock.unlock()
     }
-    
-    func safeUrlSetContains(_ member: String) -> Bool {
+    private func safeUrlSetContains(_ member: String) -> Bool {
         let contains: Bool
         urlSetLock.lock()
         contains = urlSet.contains(member)
         urlSetLock.unlock()
         return contains
     }
+    
+    /// Counts active threads
     private var blockCounter: Int = 0
     private var blockCounterLock = NSLock()
-    func safeIncrement() {
+    private func safeIncrement() {
         blockCounterLock.lock()
         blockCounter += 1
         print("increment \(blockCounter)")
         blockCounterLock.unlock()
     }
-    func safeDecrement() {
+    private func safeDecrement() {
         blockCounterLock.lock()
         blockCounter -= 1
         print("decrement \(blockCounter)")
         blockCounterLock.unlock()
     }
-    var safeBlockCounter: Int {
+    private var safeBlockCounter: Int {
         let counter: Int
         blockCounterLock.lock()
         counter = blockCounter
         blockCounterLock.unlock()
         return counter
     }
-    let parseManager = ParseManager.init()
+    
+    private let parseManager = ParseManager.init()
     private(set) var arrayTableItems: [TableItem] = [] {
         didSet {
             delegate?.updateUI()
         }
     }
+    
     func set(numberOfThreads: Int) {
         self.numberOfThreads = numberOfThreads
     }
-    
     func set(stringToFind: String) {
         self.textToFind = stringToFind
     }
@@ -105,16 +111,16 @@ class Presenter {
     func set(startUrl: URL) {
         self.startUrl = startUrl
     }
-    func safeAppend(tableItem: TableItem) {
+    
+    private func safeAppend(tableItem: TableItem) {
         DispatchQueue.main.async {
             self.arrayTableItems.append(tableItem)
         }
     }
     
-    let queue = OperationQueue()
-    init() {
-        queue.maxConcurrentOperationCount = 4
-    }
+    private let queue = OperationQueue()
+    private init() {}
+    
     func start() {
         DispatchQueue.global(qos: .default).async {  [self] in
             guard textToFind != "" else {
@@ -164,15 +170,15 @@ class Presenter {
     }
     
     private var shouldStopMyFunction: Bool = false
-    var shouldStopMyFunctionLock = NSLock()
+    private var shouldStopMyFunctionLock = NSLock()
     
-    func safeStopFunction() {
+    private func safeStopFunction() {
         shouldStopMyFunctionLock.lock()
         shouldStopMyFunction = true
         shouldStopMyFunctionLock.unlock()
     }
     
-    var safeStopFunctionVar: Bool {
+    private var safeStopFunctionVar: Bool {
         let stop: Bool
         shouldStopMyFunctionLock.lock()
         stop = shouldStopMyFunction
