@@ -24,6 +24,8 @@ class Presenter {
     private var arrayLinks: [String] = []
     
     //TODO: - Modify lock so it only locks when there are no writing actions. See: Dispatch Barrier
+    private let safeQueue = DispatchQueue(label: "ThreadSafeCollection.queue", attributes: .concurrent)
+    
     private var arrayLinksLock = NSLock()
     private func safeArrayLinksRemoveFirst() -> String? {
         let link: String?
@@ -36,60 +38,43 @@ class Presenter {
         arrayLinksLock.unlock()
         return link
     }
-    private func safeArrayLinksAppend(contentsOf array: [String]) {
-        arrayLinksLock.lock()
-        arrayLinks.append(contentsOf: array)
-        arrayLinksLock.unlock()
-    }
-    private func safeArrayLinksAppend(_ element: String) {
-        arrayLinksLock.lock()
-        arrayLinks.append(element)
-        arrayLinksLock.unlock()
-    }
+    
     private var safeArrayLinksCount: Int {
-        let count: Int
-        arrayLinksLock.lock()
-        count = arrayLinks.count
-        arrayLinksLock.unlock()
-        return count
+        return safeQueue.sync {
+            arrayLinks.count
+        }
     }
     
     private var urlSet: Set<String> = []
-    private var urlSetLock = NSLock()
     private func safeUrlSetInsert(_ url: String) {
-        urlSetLock.lock()
-        urlSet.insert(url)
-        urlSetLock.unlock()
+        safeQueue.async(flags: .barrier) {
+            self.urlSet.insert(url)
+        }
     }
     private func safeUrlSetContains(_ member: String) -> Bool {
-        let contains: Bool
-        urlSetLock.lock()
-        contains = urlSet.contains(member)
-        urlSetLock.unlock()
-        return contains
+        return safeQueue.sync {
+            urlSet.contains(member)
+        }
     }
     
     /// Counts active threads
     private var blockCounter: Int = 0
-    private var blockCounterLock = NSLock()
     private func safeIncrement() {
-        blockCounterLock.lock()
-        blockCounter += 1
-        print("increment \(blockCounter)")
-        blockCounterLock.unlock()
+        safeQueue.async(flags: .barrier) { [self] in
+            blockCounter += 1
+            print("increment \(blockCounter)")
+        }
     }
     private func safeDecrement() {
-        blockCounterLock.lock()
-        blockCounter -= 1
-        print("decrement \(blockCounter)")
-        blockCounterLock.unlock()
+        safeQueue.async(flags: .barrier) { [self] in
+            blockCounter -= 1
+            print("decrement \(blockCounter)")
+        }
     }
     private var safeBlockCounter: Int {
-        let counter: Int
-        blockCounterLock.lock()
-        counter = blockCounter
-        blockCounterLock.unlock()
-        return counter
+        return safeQueue.sync {
+            blockCounter
+        }
     }
     
     private let parseManager = ParseManager.init()
@@ -126,7 +111,10 @@ class Presenter {
             guard textToFind != "" else {
                 return
             }
-            safeArrayLinksAppend(startUrl.absoluteString)
+            safeQueue.async(flags: .barrier) {
+                print("safe append")
+                arrayLinks.append(startUrl.absoluteString)
+            }
             var counter = 0
             while counter != maxUrlCount || safeArrayLinksCount != 0 || safeBlockCounter != 0 {
                 if counter >= maxUrlCount {
@@ -146,7 +134,9 @@ class Presenter {
                             switch result {
                             case .success(let html):
                                 var scanState: ScanState = .inProgress
-                                safeArrayLinksAppend(contentsOf: parseManager.findUrlsInString(html))
+                                safeQueue.async(flags: .barrier) {
+                                    arrayLinks.append(contentsOf: parseManager.findUrlsInString(html))
+                                }
                                 if parseManager.findTextOnPage(textToFind, html) {
                                     scanState = .finishedScanning(true)
                                 } else {
@@ -170,20 +160,17 @@ class Presenter {
     }
     
     private var shouldStopMyFunction: Bool = false
-    private var shouldStopMyFunctionLock = NSLock()
     
     private func safeStopFunction() {
-        shouldStopMyFunctionLock.lock()
-        shouldStopMyFunction = true
-        shouldStopMyFunctionLock.unlock()
+        safeQueue.async(flags: .barrier) {
+            self.shouldStopMyFunction = true
+        }
     }
     
     private var safeStopFunctionVar: Bool {
-        let stop: Bool
-        shouldStopMyFunctionLock.lock()
-        stop = shouldStopMyFunction
-        shouldStopMyFunctionLock.unlock()
-        return stop
+        return safeQueue.sync {
+            shouldStopMyFunction
+        }
     }
     
     func stop() {
