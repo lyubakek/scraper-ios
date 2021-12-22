@@ -8,7 +8,6 @@ import UIKit
 import Foundation
 import CoreData
 
-@objcMembers
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate {
     
     @IBOutlet weak var startButton: UIButton!

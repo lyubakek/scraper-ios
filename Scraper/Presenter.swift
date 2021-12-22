@@ -21,68 +21,6 @@ class Presenter {
     }
     private var textToFind: String = "lun"
     private var maxUrlCount: Int = 50
-    private var arrayLinks: [String] = []
-    
-    //TODO: - Modify lock so it only locks when there are no writing actions. See: Dispatch Barrier
-    private let safeQueue = DispatchQueue(label: "ThreadSafeCollection.queue", attributes: .concurrent)
-    
-    private var arrayLinksLock = NSLock()
-    private func safeArrayLinksRemoveFirst() -> String? {
-        let link: String?
-        arrayLinksLock.lock()
-        if arrayLinks.count == 0 {
-            link = nil
-        } else {
-            link = arrayLinks.removeFirst()
-        }
-        arrayLinksLock.unlock()
-        return link
-    }
-    
-    private var safeArrayLinksCount: Int {
-        return safeQueue.sync {
-            arrayLinks.count
-        }
-    }
-    
-    private var urlSet: Set<String> = []
-    private func safeUrlSetInsert(_ url: String) {
-        safeQueue.async(flags: .barrier) {
-            self.urlSet.insert(url)
-        }
-    }
-    private func safeUrlSetContains(_ member: String) -> Bool {
-        return safeQueue.sync {
-            urlSet.contains(member)
-        }
-    }
-    
-    /// Counts active threads
-    private var blockCounter: Int = 0
-    private func safeIncrement() {
-        safeQueue.async(flags: .barrier) { [self] in
-            blockCounter += 1
-            print("increment \(blockCounter)")
-        }
-    }
-    private func safeDecrement() {
-        safeQueue.async(flags: .barrier) { [self] in
-            blockCounter -= 1
-            print("decrement \(blockCounter)")
-        }
-    }
-    private var safeBlockCounter: Int {
-        return safeQueue.sync {
-            blockCounter
-        }
-    }
-    
-    private let parseManager = ParseManager.init()
-    private(set) var arrayTableItems: [TableItem] = [] {
-        didSet {
-            delegate?.updateUI()
-        }
-    }
     
     func set(numberOfThreads: Int) {
         self.numberOfThreads = numberOfThreads
@@ -95,6 +33,15 @@ class Presenter {
     }
     func set(startUrl: URL) {
         self.startUrl = startUrl
+    }
+    
+    private let safe = SafeManager.init()
+    private let parseManager = ParseManager.init()
+    
+    private(set) var arrayTableItems: [TableItem] = [] {
+        didSet {
+            delegate?.updateUI()
+        }
     }
     
     private func safeAppend(tableItem: TableItem) {
@@ -111,69 +58,81 @@ class Presenter {
             guard textToFind != "" else {
                 return
             }
-            safeQueue.async(flags: .barrier) {
-                print("safe append")
-                arrayLinks.append(startUrl.absoluteString)
-            }
+            safe.arrayLinksAppend(startUrl.absoluteString)
+            
             var counter = 0
-            while counter != maxUrlCount || safeArrayLinksCount != 0 || safeBlockCounter != 0 {
+            while counter != maxUrlCount || safe.arrayLinksCount != 0 || safe.safeBlockCounter != 0 {
                 if counter >= maxUrlCount {
                     break
                 }
-                if safeStopFunctionVar == true {
+                if safe.stopFunctionVar == true {
                     break
                 }
-                guard let url = safeArrayLinksRemoveFirst() else { continue }
+                guard let url = safe.arrayLinksRemoveFirst() else { continue }
                 counter += 1
-                let blockOperation = BlockOperation {
-                    safeIncrement()
-                    print("This is start blockOperation at \(Thread.current)")
-                    if !safeUrlSetContains(url) {
-                        safeUrlSetInsert(url)
-                        parseManager.getDataFromUrl(url) { (result) in
-                            switch result {
-                            case .success(let html):
-                                var scanState: ScanState = .inProgress
-                                safeQueue.async(flags: .barrier) {
-                                    arrayLinks.append(contentsOf: parseManager.findUrlsInString(html))
-                                }
-                                if parseManager.findTextOnPage(textToFind, html) {
-                                    scanState = .finishedScanning(true)
-                                } else {
-                                    scanState = .finishedScanning(false)
-                                }
-                                let oneTableItem: TableItem = TableItem(nameUrl: url, stateUrl: scanState)
-                                safeAppend(tableItem: oneTableItem)
-                                
-                            case .failure(let error):
-                                print(error.localizedDescription)
-                            }
-                        }
-                    }
-                    print(counter)
-                    print(safeArrayLinksCount)
-                }
-                blockOperation.completionBlock = { safeDecrement() }
-                queue.addOperation(blockOperation)
+                
+                let makeOperation = AlgorithmOperation(safe, parseManager, url, textToFind, counter, safeAppend: safeAppend)
+                
+                safe.decrement()
+                queue.addOperation(makeOperation)
             }
-        }
-    }
-    
-    private var shouldStopMyFunction: Bool = false
-    
-    private func safeStopFunction() {
-        safeQueue.async(flags: .barrier) {
-            self.shouldStopMyFunction = true
-        }
-    }
-    
-    private var safeStopFunctionVar: Bool {
-        return safeQueue.sync {
-            shouldStopMyFunction
         }
     }
     
     func stop() {
-        safeStopFunction()
+        safe.stopFunction()
+    }
+}
+
+class AlgorithmOperation: Operation {
+    
+    let safe: SafeManager
+    let parseManager: ParseManager
+    var url: String
+    let textToFind: String
+    var counter: Int
+    var safeAppend: (TableItem) -> Void
+    
+    init(_ safe: SafeManager, _ parseManager: ParseManager, _ url: String, _ textToFind: String, _ counter: Int, safeAppend: @escaping (TableItem) -> Void) {
+        self.safe = safe
+        self.parseManager = parseManager
+        self.url = url
+        self.textToFind = textToFind
+        self.counter = counter
+        self.safeAppend = safeAppend
+    }
+    
+    override func main() {
+        if isCancelled {
+            return
+        }
+        safe.increment()
+        print("This is start blockOperation at \(Thread.current)")
+        if !safe.urlSetContains(url) {
+            safe.urlSetInsert(url)
+            parseManager.getDataFromUrl(url) { (result) in
+                switch result {
+                case .success(let html):
+                    var scanState: ScanState = .inProgress
+                    self.safe.arrayLinksAppend(contentsOf: self.parseManager.findUrlsInString(html))
+                    
+                    if self.parseManager.findTextOnPage(self.textToFind, html) {
+                        scanState = .finishedScanning(true)
+                    } else {
+                        scanState = .finishedScanning(false)
+                    }
+                    let oneTableItem: TableItem = TableItem(nameUrl: self.url, stateUrl: scanState)
+                    self.safeAppend(oneTableItem)
+                    
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            }
+        }
+        if isCancelled {
+            return
+        }
+        print(counter)
+        print(safe.arrayLinksCount)
     }
 }
