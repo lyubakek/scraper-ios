@@ -1,0 +1,6 @@
+framework module Pods_Scraper {
+  umbrella header "Pods-Scraper-umbrella.h"
+
+  export *
+  module * { export * }
+}
