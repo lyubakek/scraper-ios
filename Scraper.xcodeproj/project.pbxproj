@@ -20,9 +20,11 @@
 		9D56A2892724579100AF1F16 /* Presenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D56A2882724578F00AF1F16 /* Presenter.swift */; };
 		9DD14A55276F3EDC00B9214C /* SafeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DD14A54276F3EDA00B9214C /* SafeManager.swift */; };
 		9DEB0CC427562CF800D1721B /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DEB0CC327562CF800D1721B /* DetailViewController.swift */; };
+		B3B11B9F5F372FCE78702B1A /* Pods_Scraper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EF2E246598B524CF3752C377 /* Pods_Scraper.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2AFA333D5F69D9495016B709 /* Pods-Scraper.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Scraper.release.xcconfig"; path = "Target Support Files/Pods-Scraper/Pods-Scraper.release.xcconfig"; sourceTree = "<group>"; };
 		9D20E76F270F3D7800442432 /* Scraper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Scraper.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9D20E772270F3D7800442432 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9D20E774270F3D7800442432 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -38,6 +40,8 @@
 		9D56A2882724578F00AF1F16 /* Presenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Presenter.swift; sourceTree = "<group>"; };
 		9DD14A54276F3EDA00B9214C /* SafeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafeManager.swift; sourceTree = "<group>"; };
 		9DEB0CC327562CF800D1721B /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
+		EE74F519D6D416661DBCE063 /* Pods-Scraper.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Scraper.debug.xcconfig"; path = "Target Support Files/Pods-Scraper/Pods-Scraper.debug.xcconfig"; sourceTree = "<group>"; };
+		EF2E246598B524CF3752C377 /* Pods_Scraper.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Scraper.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -45,6 +49,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B3B11B9F5F372FCE78702B1A /* Pods_Scraper.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -56,6 +61,8 @@
 			children = (
 				9D20E771270F3D7800442432 /* Scraper */,
 				9D20E770270F3D7800442432 /* Products */,
+				CB50055158A66B176E29938D /* Pods */,
+				FB6E1BC6A4C054492526FD09 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -112,6 +119,24 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		CB50055158A66B176E29938D /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				EE74F519D6D416661DBCE063 /* Pods-Scraper.debug.xcconfig */,
+				2AFA333D5F69D9495016B709 /* Pods-Scraper.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		FB6E1BC6A4C054492526FD09 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				EF2E246598B524CF3752C377 /* Pods_Scraper.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -119,10 +144,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 9D20E783270F3D7B00442432 /* Build configuration list for PBXNativeTarget "Scraper" */;
 			buildPhases = (
+				42936246D5B8340A80385BF5 /* [CP] Check Pods Manifest.lock */,
 				9D20E76B270F3D7800442432 /* Sources */,
 				9D20E76C270F3D7800442432 /* Frameworks */,
 				9D20E76D270F3D7800442432 /* Resources */,
 				9D68E876274FAFEC006EE313 /* ShellScript */,
+				DCDF78096E6443726114E29F /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -179,6 +206,28 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		42936246D5B8340A80385BF5 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Scraper-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
 		9D68E876274FAFEC006EE313 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -195,6 +244,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "if which swiftlint >/dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
+		DCDF78096E6443726114E29F /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Scraper/Pods-Scraper-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Scraper/Pods-Scraper-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Scraper/Pods-Scraper-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -356,6 +422,7 @@
 		};
 		9D20E784270F3D7B00442432 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = EE74F519D6D416661DBCE063 /* Pods-Scraper.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -375,6 +442,7 @@
 		};
 		9D20E785270F3D7B00442432 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2AFA333D5F69D9495016B709 /* Pods-Scraper.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
