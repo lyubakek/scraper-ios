@@ -9,10 +9,9 @@ import UIKit
 
 class DetailViewController: UIViewController {
         
-    @IBOutlet weak var urlLabel: UILabel!
     @IBOutlet weak var statusUrlLabel: UILabel!
-    @IBOutlet weak var openUrlButton: UIButton!
-        
+    @IBOutlet weak var linkView: LinkView!
+    
     private let tableItem: TableItem
 
     init?(tableItem: TableItem, title: String = "Link details", coder: NSCoder) {
@@ -27,13 +26,13 @@ class DetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        urlLabel.text = tableItem.nameUrl
+                
+        linkView.urlLabel.text = tableItem.nameUrl
         statusUrlLabel.text = tableItem.stateUrl.description
     }
     
-    @IBAction func openUrlButtonTapped(_ sender: Any) {
-        guard let url = URL(string: urlLabel.text!) else { return }
+    func openUrlButtonTapped() {
+        guard let url = URL(string: linkView.urlLabel.text!) else { return }
         UIApplication.shared.open(url)
     }
 }
